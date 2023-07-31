@@ -1,16 +1,17 @@
-with open('file1.py', 'r') as f1, open('file2.py', 'r') as f2, open('file3.py', 'r') as f3:
+def combine_files(input_files, output_file):
     # Read the contents of each file
-    content1 = f1.read()
-    content2 = f2.read()
-    content3 = f3.read()
+    contents = []
+    for filename in input_files:
+        with open(filename, 'r') as file:
+            contents.append(file.read())
 
-# Combine the contents into a single string
-combined_content = content1 + '\n' + content2 + '\n' + content3
+    # Combine the contents into a single string
+    combined_content = '\n'.join(contents)
 
-# Open a new file for writing
-with open('combined.py', 'w') as combined_file:
-    # Write the combined content to the new file
-    combined_file.write(combined_content)
+    # Open a new file for writing
+    with open(output_file, 'w') as combined_file:
+        # Write the combined content to the new file
+        combined_file.write(combined_content)
 
 
 def rearrange_code(original_file, output_file):
@@ -22,8 +23,9 @@ def rearrange_code(original_file, output_file):
         code_lines = file.readlines()
 
     # Identify and remove duplicate import statements
-    for line in code_lines[:]:
-        if line.startswith('import') or line.startswith('from'):
+    code_lines_copy = code_lines.copy()  # Avoid modifying the list while iterating
+    for line in code_lines_copy:
+        if line.startswith(('import', 'from')):
             imported_modules.add(line.strip())
             code_lines.remove(line)
 
@@ -52,9 +54,13 @@ def rearrange_code(original_file, output_file):
         file.write(rearranged_code)
 
 
-# Rearrange the code and write it to a new file
-rearrange_code('combined.py', 'rearranged_code.py')
+if __name__ == '__main__':
+    input_files = ['file1.py', 'file2.py', 'file3.py']
+    output_file = 'combined.py'
 
+    # Combine the code from input_files and write it to 'combined.py'
+    combine_files(input_files, output_file)
 
-
+    # Rearrange the code from 'combined.py' and write it to 'rearranged_code.py'
+    rearrange_code(output_file, 'rearranged_code.py')
 
