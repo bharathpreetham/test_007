@@ -54,3 +54,5 @@ def rearrange_code(original_file, output_file):
 
 # Rearrange the code and write it to a new file
 rearrange_code('combined.py', 'rearranged_code.py')
+
+
